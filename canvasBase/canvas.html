@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas study</title>
+</head>
+<body>
+    <canvas id="canvas">
+
+    </canvas>
+    <script>
+        var canvas = document.getElementById("canvas")
+        canvas.width = 1024
+        canvas.height = 768
+
+        var context = canvas.getContext("2d")
+
+        context.moveTo(100,100)
+        context.lineTo(700,700)
+        context.lineTo(100,700)
+        context.lineTo(100,100)
+
+        context.fillStyle = "#FF0000"
+        context.fill()
+
+        context.lineWidth = 5
+        context.strokeStyle = "#00FF00"
+        context.stroke()
+
+    </script>
+</body>
+</html>
