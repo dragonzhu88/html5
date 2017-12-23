@@ -4,20 +4,52 @@ var RADIUS = 8
 var MARGIN_LEFT = 60
 var MARGIN_TOP = 30
 
+const endtime = new Date(2017,11,25,0,0,0)
+var curShowTimeSeconds = 0
+
 window.onload = function (ev) {
     var canvas = document.getElementById("canvas")
     canvas.width = WIN_WIDTH
     canvas.height = WIN_HEIGHT
 
     var context = canvas.getContext("2d")
-
+    curShowTimeSeconds = getCurrentShowTimeSeconds()
     render( context )
+    setInterval(function () {
+        render(context)
+        update()
+    },50)
+}
+
+function update() {
+    var nextShowTimeSeconds = getCurrentShowTimeSeconds()
+    var hours = parseInt(nextShowTimeSeconds/3600)
+    var minutes = parseInt((nextShowTimeSeconds - hours*3600)/60)
+    var seconds = parseInt(nextShowTimeSeconds%60)
+
+    var nextHours = parseInt(curShowTimeSeconds/3600)
+    var nextMinutes = parseInt((curShowTimeSeconds - hours*3600)/60)
+    var nextSeconds = parseInt(curShowTimeSeconds%60)
+
+    if(nextSeconds != seconds){
+        curShowTimeSeconds = nextShowTimeSeconds
+    }
+
+}
+
+function getCurrentShowTimeSeconds() {
+    var curTime = new Date()
+    var ret = endtime.getTime() - curTime.getTime()
+    ret = Math.round(ret/1000)
+    return ret >=0 ? ret : 0
 }
 
 function render( cxt ) {
-    var hours = 12
-    var minutes = 34
-    var seconds = 56
+    cxt.clearRect(0,0,WIN_WIDTH,WIN_HEIGHT)
+
+    var hours = parseInt(curShowTimeSeconds/3600)
+    var minutes = parseInt((curShowTimeSeconds - hours*3600)/60)
+    var seconds = parseInt(curShowTimeSeconds%60)
 
     renderDigit(MARGIN_LEFT, MARGIN_TOP, parseInt(hours/10), cxt)
     renderDigit(MARGIN_LEFT + 15*(RADIUS+1), MARGIN_TOP,parseInt(hours%10), cxt)
