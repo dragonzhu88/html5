@@ -4,13 +4,22 @@ var RADIUS = 8
 var MARGIN_LEFT = 60
 var MARGIN_TOP = 30
 
-const endtime = new Date(2017,11,25,0,0,0)
+const endtime = new Date(2017,11,27,0,0,0)
 var curShowTimeSeconds = 0
 var balls = [];
 
 const colors = ["#33B5E5","0099CC","#AA66CC","#9933CC","#99CC00","#669900","#FFBB33","#FF4444","#CC0000"]
 
 window.onload = function (ev) {
+
+    WIN_WIDTH = document.body.clientWidth
+    WIN_HEIGHT = document.body.clientHeight
+
+    MARGIN_LEFT = Math.round(WIN_WIDTH/10)
+    RADIUS = Math.round(WIN_WIDTH*4/5/108)
+
+    MARGIN_TOP = Math.round(WIN_HEIGHT/5)
+
     var canvas = document.getElementById("canvas")
     canvas.width = WIN_WIDTH
     canvas.height = WIN_HEIGHT
@@ -59,7 +68,12 @@ function update() {
 
     updateBalls()
 
+    console.log(balls.length)
+
 }
+
+
+
 
 function updateBalls() {
     for(var i=0;i<balls.length;i++){
@@ -72,15 +86,26 @@ function updateBalls() {
             balls[i].vy = -balls[i].vy*0.75
         }
 
-        if(balls[i].x <= RADIUS + 1){
-            balls[i].x = RADIUS + 1
-            balls[i].vx = -balls[i].vx
-        }
+        // if(balls[i].x <= RADIUS + 1){
+        //     balls[i].x = RADIUS + 1
+        //     balls[i].vx = -balls[i].vx
+        // }
+        //
+        // if(balls[i].x >= WIN_WIDTH - RADIUS-1){
+        //     balls[i].x = WIN_WIDTH - RADIUS-1
+        //     balls[i].vx = -balls[i].vx
+        // }
+    }
 
-        if(balls[i].x >= WIN_WIDTH - RADIUS-1){
-            balls[i].x = WIN_WIDTH - RADIUS-1
-            balls[i].vx = -balls[i].vx
+    var cnt = 0
+    for(var i=0;i<balls.length;i++){
+        if(balls[i].x - RADIUS >0 && balls[i].x + RADIUS <WIN_WIDTH){
+            balls[cnt++] = balls[i]
         }
+    }
+
+    while(balls.length > Math.min(300,cnt)){
+        balls.pop();
     }
 
 }
@@ -105,9 +130,12 @@ function addBalls(x,y,num) {
 
 function getCurrentShowTimeSeconds() {
     var curTime = new Date()
-    var ret = endtime.getTime() - curTime.getTime()
-    ret = Math.round(ret/1000)
-    return ret >=0 ? ret : 0
+    // var ret = endtime.getTime() - curTime.getTime()
+    // ret = Math.round(ret/1000)
+    // return ret >=0 ? ret : 0
+
+    var ret = curTime.getHours() * 3600 + curTime.getMinutes() * 60 + curTime.getSeconds()
+    return ret
 }
 
 function render( cxt ) {
